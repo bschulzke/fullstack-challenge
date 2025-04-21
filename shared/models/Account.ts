@@ -24,4 +24,21 @@ export class Account {
   setDeals(deals: Deal[]) {
     this.deals = deals;
   }
+
+  static fromJson(json: any): Account {
+    const account = new Account(
+      json.account_id,
+      json.organization_id,
+      json.name,
+      new Date(json.created_at),
+      new Date(json.updated_at)
+    );
+
+    if (json.deals) {
+      const deals = json.deals.map(Deal.fromJson);
+      account.setDeals(deals);
+    }
+
+    return account;
+  }
 }

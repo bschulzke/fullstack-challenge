@@ -40,4 +40,16 @@ export class Deal {
       status: this.status
     };
   }
+
+  static fromJson(json: any): Deal {
+    return new Deal(
+      json.deal_id,
+      json.account_id,
+      json.name,
+      new Date(json.start_date),
+      new Date(json.end_date),
+      json.value,
+      json.status as DealStatus
+    );
+  }
 }

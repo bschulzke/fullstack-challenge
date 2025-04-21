@@ -31,4 +31,20 @@ export class Organization {
   setAccounts(accounts: Account[]) {
     this.accounts = accounts;
   }
+
+  static fromJson(json: any): Organization {
+    const org = new Organization(
+      json.organization_id,
+      json.name,
+      new Date(json.created_at),
+      new Date(json.updated_at)
+    );
+
+    if (json.accounts) {
+      const accounts = json.accounts.map(Account.fromJson);
+      org.setAccounts(accounts);
+    }
+
+    return org;
+  }
 }
