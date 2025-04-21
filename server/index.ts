@@ -22,6 +22,17 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the server! 🎉", rows });
 });
 
+// New /organizations endpoint to fetch all organizations
+app.get("/organizations", (req, res) => {
+  try {
+    const organizations = orgService.getAllOrganizations();
+    res.json(organizations);
+  } catch (error) {
+    console.error("Error fetching organizations:", error);
+    res.status(500).json({ message: "Error fetching organizations" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
