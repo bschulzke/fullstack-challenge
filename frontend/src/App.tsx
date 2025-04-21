@@ -59,7 +59,7 @@ function App() {
 
             return (
               deal.name.toLowerCase().includes(filters.dealName.toLowerCase()) &&
-              (filters.dealValue ? deal.value.toString().includes(filters.dealValue) : true) &&
+              (filters.dealValue ? deal.value === Number(filters.dealValue) : true) &&
               (filters.dealStatus ? deal.status === filters.dealStatus : true) &&
               (filterStartYear ? dealStartYear === filterStartYear : true) &&
               (filterEndYear ? dealEndYear === filterEndYear : true)
