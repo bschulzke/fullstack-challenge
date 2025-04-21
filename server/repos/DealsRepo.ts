@@ -1,5 +1,5 @@
 import initializeDatabase from "../db";
-import { Deal } from "../models/Deal";
+import { Deal, DealStatus } from "../models/Deal";
 
 export class DealsRepo {
   constructor(private db = initializeDatabase()) {}
@@ -15,7 +15,7 @@ export class DealsRepo {
       deal.start_date.toISOString(),
       deal.end_date.toISOString(),
       deal.value,
-      deal.status
+      deal.status // Stored as string
     );
   }
 
@@ -31,7 +31,7 @@ export class DealsRepo {
       deal.start_date.toISOString(),
       deal.end_date.toISOString(),
       deal.value,
-      deal.status,
+      deal.status, // Stored as string
       deal.deal_id
     );
   }

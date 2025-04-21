@@ -1,3 +1,11 @@
+export enum DealStatus {
+  Prospect = "Prospect",
+  Negotiation = "Negotiation",
+  Won = "Won",
+  Lost = "Lost",
+  OnHold = "OnHold"
+}
+
 export class Deal {
   constructor(
     public deal_id: number,
@@ -6,7 +14,7 @@ export class Deal {
     public start_date: Date,
     public end_date: Date,
     public value: number,
-    public status: number
+    public status: DealStatus
   ) {}
 
   static fromRow(row: any): Deal {
@@ -17,7 +25,7 @@ export class Deal {
       new Date(row.start_date),
       new Date(row.end_date),
       row.value,
-      row.status
+      row.status as DealStatus
     );
   }
 

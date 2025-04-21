@@ -1,5 +1,5 @@
 import { DealsRepo } from "../repos/DealsRepo";
-import { Deal } from "../models/Deal";
+import { Deal, DealStatus } from "../models/Deal";
 import initializeDatabase from "../db";
 
 jest.mock("../db", () => ({
@@ -22,8 +22,8 @@ describe("DealsRepo", () => {
   });
 
   it("should insert a deal", () => {
-    const deal = new Deal(1, 1, "Deal 1", new Date("2025-01-01"), new Date("2025-12-31"), 1000, 1);
-    
+    const deal = new Deal(1, 1, "Deal 1", new Date("2025-01-01"), new Date("2025-12-31"), 1000, DealStatus.Prospect);
+
     repo.insert(deal);
 
     expect(mockDb.prepare).toHaveBeenCalledWith(expect.stringContaining("INSERT INTO deals"));
@@ -38,8 +38,8 @@ describe("DealsRepo", () => {
   });
 
   it("should update a deal", () => {
-    const deal = new Deal(1, 1, "Updated Deal", new Date("2025-02-01"), new Date("2025-12-31"), 2000, 2);
-    deal.deal_id = 1; // Assuming deal_id exists for update
+    const deal = new Deal(1, 1, "Updated Deal", new Date("2025-02-01"), new Date("2025-12-31"), 2000, DealStatus.Negotiation);
+    deal.deal_id = 1;
 
     repo.update(deal);
 
@@ -63,7 +63,7 @@ describe("DealsRepo", () => {
       start_date: "2025-01-01T00:00:00.000Z",
       end_date: "2025-12-31T00:00:00.000Z",
       value: 1000,
-      status: 1
+      status: "Prospect"
     };
     mockDb.get.mockReturnValue(mockDealRow);
 
@@ -72,14 +72,14 @@ describe("DealsRepo", () => {
     expect(deal).toBeInstanceOf(Deal);
     expect(deal?.deal_id).toBe(1);
     expect(deal?.value).toBe(1000);
-    expect(deal?.status).toBe(1);
+    expect(deal?.status).toBe(DealStatus.Prospect);
     expect(mockDb.prepare).toHaveBeenCalledWith(expect.stringContaining("SELECT * FROM deals"));
   });
 
   it("should return null if deal is not found", () => {
     mockDb.get.mockReturnValue(null);
 
-    const deal = repo.find(99); // Non-existent deal_id
+    const deal = repo.find(99);
 
     expect(deal).toBeNull();
   });
@@ -95,8 +95,24 @@ describe("DealsRepo", () => {
 
   it("should find all deals by account ID", () => {
     const mockDealRows = [
-      { deal_id: 1, account_id: 1, name: "Deal 1", start_date: "2025-01-01T00:00:00.000Z", end_date: "2025-12-31T00:00:00.000Z", value: 1000, status: 1 },
-      { deal_id: 2, account_id: 1, name: "Deal 2", start_date: "2025-02-01T00:00:00.000Z", end_date: "2025-12-31T00:00:00.000Z", value: 2000, status: 2 },
+      {
+        deal_id: 1,
+        account_id: 1,
+        name: "Deal 1",
+        start_date: "2025-01-01T00:00:00.000Z",
+        end_date: "2025-12-31T00:00:00.000Z",
+        value: 1000,
+        status: "Prospect"
+      },
+      {
+        deal_id: 2,
+        account_id: 1,
+        name: "Deal 2",
+        start_date: "2025-02-01T00:00:00.000Z",
+        end_date: "2025-12-31T00:00:00.000Z",
+        value: 2000,
+        status: "Negotiation"
+      }
     ];
     mockDb.all.mockReturnValue(mockDealRows);
 
@@ -104,7 +120,8 @@ describe("DealsRepo", () => {
 
     expect(deals).toHaveLength(2);
     expect(deals[0].value).toBe(1000);
-    expect(deals[1].status).toBe(2);
+    expect(deals[0].status).toBe(DealStatus.Prospect);
+    expect(deals[1].status).toBe(DealStatus.Negotiation);
     expect(mockDb.prepare).toHaveBeenCalledWith(expect.stringContaining("SELECT * FROM deals"));
   });
 });
