@@ -55,7 +55,8 @@ describe("AccountsRepo", () => {
     expect(mockDb.run).toHaveBeenCalledWith(
       account.account_id,
       account.name,
-      new Date().toISOString()
+      new Date().toISOString(),
+      account.account_id
     );
   });
 
