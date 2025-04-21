@@ -1,5 +1,5 @@
 import { AccountsRepo } from "../repos/AccountsRepo";
-import { Account } from "../models/Account";
+import { Account } from "../../shared/models/Account";
 import initializeDatabase from "../db";
 
 jest.mock("../db", () => ({

@@ -1,5 +1,5 @@
 import { DealsRepo } from "../repos/DealsRepo";
-import { Deal, DealStatus } from "../models/Deal";
+import { Deal, DealStatus } from "../../shared/models/Deal";
 
 export class DealService {
   constructor(private readonly repo = new DealsRepo()) {}

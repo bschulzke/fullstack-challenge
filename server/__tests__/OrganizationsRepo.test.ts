@@ -1,5 +1,5 @@
 import { OrganizationsRepo } from "../repos/OrganizationsRepo";
-import { Organization } from "../models/Organization";
+import { Organization } from "../../shared/models/Organization";
 import initializeDatabase from "../db";
 
 jest.mock("../db", () => ({

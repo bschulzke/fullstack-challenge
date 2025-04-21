@@ -1,5 +1,5 @@
 import initializeDatabase from "../db";
-import { Deal, DealStatus } from "../models/Deal";
+import { Deal, DealStatus } from "../../shared/models/Deal";
 
 export class DealsRepo {
   constructor(private db = initializeDatabase()) {}

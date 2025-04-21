@@ -1,5 +1,5 @@
 import initializeDatabase from "../db";
-import { Organization } from "../models/Organization";
+import { Organization } from "../../shared/models/Organization";
 
 export class OrganizationsRepo {
   constructor(private db = initializeDatabase()) {}

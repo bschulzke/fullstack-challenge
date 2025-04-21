@@ -1,6 +1,6 @@
 import { DealService } from "../services/DealService";
 import { DealsRepo } from "../repos/DealsRepo";
-import { Deal, DealStatus } from "../models/Deal";
+import { Deal, DealStatus } from "../../shared/models/Deal";
 
 // Mock DealsRepo
 jest.mock("../repos/DealsRepo");

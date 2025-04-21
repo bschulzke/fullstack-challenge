@@ -1,8 +1,8 @@
 import { OrganizationService } from "../services/OrganizationService";
 import { OrganizationsRepo } from "../repos/OrganizationsRepo";
 import { AccountService } from "../services/AccountService";
-import { Organization } from "../models/Organization";
-import { Account } from "../models/Account";
+import { Organization } from "../../shared/models/Organization";
+import { Account } from "../../shared/models/Account";
 
 // Mock the dependencies
 jest.mock("../repos/OrganizationsRepo");

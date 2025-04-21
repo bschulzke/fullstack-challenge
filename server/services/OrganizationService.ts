@@ -1,5 +1,5 @@
 // services/OrganizationService.ts
-import { Organization } from "../models/Organization";
+import { Organization } from "../../shared/models/Organization";
 import { OrganizationsRepo } from "../repos/OrganizationsRepo";
 import { AccountService } from "./AccountService";
 

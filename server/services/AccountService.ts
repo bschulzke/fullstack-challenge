@@ -1,7 +1,7 @@
-import { Account } from "../models/Account";
+import { Account } from "../../shared/models/Account";
 import { AccountsRepo } from "../repos/AccountsRepo";
 import { DealsRepo } from "../repos/DealsRepo";
-import { Deal } from "../models/Deal";
+import { Deal } from "../../shared/models/Deal";
 
 export class AccountService {
 

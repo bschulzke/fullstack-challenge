@@ -1,7 +1,7 @@
 // tests/AccountService.test.ts
 import { AccountService } from "../services/AccountService";
 import { AccountsRepo } from "../repos/AccountsRepo";
-import { Account } from "../models/Account";
+import { Account } from "../../shared/models/Account";
 import { DealsRepo } from "../repos/DealsRepo";
 
 jest.mock("../repos/AccountsRepo");
