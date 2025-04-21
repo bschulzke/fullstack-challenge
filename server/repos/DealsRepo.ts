@@ -6,21 +6,23 @@ export class DealsRepo {
 
   insert(deal: Deal): void {
     const stmt = this.db.prepare(`
-      INSERT INTO deals (account_id, name, start_date, end_date)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO deals (account_id, name, start_date, end_date, value, status)
+      VALUES (?, ?, ?, ?, ?, ?)
     `);
     stmt.run(
       deal.account_id,
       deal.name,
       deal.start_date.toISOString(),
-      deal.end_date.toISOString()
+      deal.end_date.toISOString(),
+      deal.value,
+      deal.status
     );
   }
 
   update(deal: Deal): void {
     const stmt = this.db.prepare(`
       UPDATE deals
-      SET account_id = ?, name = ?, start_date = ?, end_date = ?
+      SET account_id = ?, name = ?, start_date = ?, end_date = ?, value = ?, status = ?
       WHERE deal_id = ?
     `);
     stmt.run(
@@ -28,6 +30,8 @@ export class DealsRepo {
       deal.name,
       deal.start_date.toISOString(),
       deal.end_date.toISOString(),
+      deal.value,
+      deal.status,
       deal.deal_id
     );
   }

@@ -32,6 +32,8 @@ function initializeDatabase() {
       name TEXT NOT NULL,
       start_date DATETIME NOT NULL,
       end_date DATETIME NOT NULL,
+      value INTEGER NOT NULL,
+      status INTEGER NOT NULL,
       FOREIGN KEY (account_id) REFERENCES accounts(account_id)
     );
     `
