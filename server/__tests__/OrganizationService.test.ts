@@ -1,22 +1,22 @@
 import { OrganizationService } from "../services/OrganizationService";
 import { OrganizationsRepo } from "../repos/OrganizationsRepo";
-import { AccountsRepo } from "../repos/AccountsRepo";
+import { AccountService } from "../services/AccountService";
 import { Organization } from "../models/Organization";
 import { Account } from "../models/Account";
 
-// Mock the repositories
+// Mock the dependencies
 jest.mock("../repos/OrganizationsRepo");
-jest.mock("../repos/AccountsRepo");
+jest.mock("../services/AccountService");
 
 describe("OrganizationService", () => {
   let service: OrganizationService;
   let mockOrgRepo: jest.Mocked<OrganizationsRepo>;
-  let mockAccRepo: jest.Mocked<AccountsRepo>;
+  let mockAccService: jest.Mocked<AccountService>;
 
   beforeEach(() => {
     mockOrgRepo = new OrganizationsRepo() as jest.Mocked<OrganizationsRepo>;
-    mockAccRepo = new AccountsRepo() as jest.Mocked<AccountsRepo>;
-    service = new OrganizationService(mockOrgRepo, mockAccRepo);
+    mockAccService = new AccountService() as jest.Mocked<AccountService>;
+    service = new OrganizationService(mockOrgRepo, mockAccService);
   });
 
   it("should create an organization", () => {
@@ -42,14 +42,14 @@ describe("OrganizationService", () => {
     const accounts = [new Account(1, 1, "Account 1"), new Account(2, 1, "Account 2")];
 
     mockOrgRepo.find = jest.fn().mockReturnValue(org);
-    mockAccRepo.findByOrganization = jest.fn().mockReturnValue(accounts);
+    mockAccService.getAccountsByOrganization = jest.fn().mockReturnValue(accounts);
 
     const result = service.getOrganization(1);
 
     expect(result).toBeInstanceOf(Organization);
     expect(result?.accounts).toEqual(accounts);
     expect(mockOrgRepo.find).toHaveBeenCalledWith(1);
-    expect(mockAccRepo.findByOrganization).toHaveBeenCalledWith(1);
+    expect(mockAccService.getAccountsByOrganization).toHaveBeenCalledWith(1);
   });
 
   it("should return null if organization is not found", () => {
@@ -74,18 +74,23 @@ describe("OrganizationService", () => {
       new Organization(1, "Org 1", new Date(), new Date()),
       new Organization(2, "Org 2", new Date(), new Date())
     ];
-    const accounts = [new Account(1, 1, "Account 1"), new Account(2, 2, "Account 2")];
+    const accounts1 = [new Account(1, 1, "Account 1")];
+    const accounts2 = [new Account(2, 2, "Account 2")];
 
     mockOrgRepo.all = jest.fn().mockReturnValue(orgs);
-    mockAccRepo.findByOrganization = jest.fn().mockReturnValue(accounts);
+    mockAccService.getAccountsByOrganization = jest
+      .fn()
+      .mockImplementation((orgId: number) => {
+        return orgId === 1 ? accounts1 : accounts2;
+      });
 
     const result = service.getAllOrganizations();
 
     expect(result).toHaveLength(2);
-    expect(result[0].accounts).toEqual(accounts);
-    expect(result[1].accounts).toEqual(accounts);
+    expect(result[0].accounts).toEqual(accounts1);
+    expect(result[1].accounts).toEqual(accounts2);
     expect(mockOrgRepo.all).toHaveBeenCalled();
-    expect(mockAccRepo.findByOrganization).toHaveBeenCalledWith(1);
-    expect(mockAccRepo.findByOrganization).toHaveBeenCalledWith(2);
+    expect(mockAccService.getAccountsByOrganization).toHaveBeenCalledWith(1);
+    expect(mockAccService.getAccountsByOrganization).toHaveBeenCalledWith(2);
   });
 });

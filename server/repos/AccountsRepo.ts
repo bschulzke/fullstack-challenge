@@ -50,4 +50,9 @@ export class AccountsRepo {
         `).all(organization_id);
         return rows.map(Account.fromRow);
     }
+
+    all(): Account[] {
+        const rows = this.db.prepare(`SELECT * FROM accounts`).all();
+        return rows.map(Account.fromRow);
+      }
 }

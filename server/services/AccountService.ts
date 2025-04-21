@@ -4,9 +4,8 @@ import { DealsRepo } from "../repos/DealsRepo";
 import { Deal } from "../models/Deal";
 
 export class AccountService {
-  private dealsRepo = new DealsRepo();
 
-  constructor(private accountRepo = new AccountsRepo()) {}
+  constructor(private accountRepo = new AccountsRepo(), private dealsRepo = new DealsRepo()) {}
 
   createAccount(account: Account): void {
     this.accountRepo.insert(account);
@@ -29,4 +28,21 @@ export class AccountService {
     this.accountRepo.delete(id);
   }
 
+  getAllAccounts(): Account[] {
+    const accounts = this.accountRepo.all();
+    accounts.forEach(account => {
+      const deals = this.dealsRepo.findByAccount(account.account_id);
+      account.setDeals(deals);
+    });
+    return accounts;
+  }
+
+  getAccountsByOrganization(orgId: number): Account[] {
+    const accounts = this.accountRepo.findByOrganization(orgId);
+    accounts.forEach(account => {
+      const deals = this.dealsRepo.findByAccount(account.account_id);
+      account.setDeals(deals);
+    });
+    return accounts;
+  }
 }
