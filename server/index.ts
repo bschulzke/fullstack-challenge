@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  const rows = db.prepare("SELECT * FROM organizations").all();
+  const rows = db.prepare("SELECT * FROM sqlite_master WHERE type='table';").all();
   res.json({ message: "Welcome to the server! 🎉", rows });
 });
 
