@@ -1,19 +1,57 @@
+import { useState, useEffect } from 'react';
+import { Organization } from '../../shared/models/Organization';
+
 function App() {
+  const [organizations, setOrganizations] = useState<Organization[] | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('http://localhost:3500/organizations');
+        if (response.ok) {
+          const data = await response.json();
+          setOrganizations(data.map(Organization.fromJson));
+        } else {
+          console.error('Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <div>
-      <h1>🎉 Welcome to the Fullstack Challenge! 🎉</h1>
-      <p>Replace the content here with your own code and organize files as you see fit</p>
-      <h2>Rules</h2>
-      <ul>
-        <li>Spend no more than 4 hours working on the challenge</li>
-        <li>Make use of any libraries and tools that you like </li>
-        <li>Feel free to use help from LLMs but be prepared to explain your code and the choices you made</li>
-        <li>Commit as you go. We want to see your thought process</li>
-      </ul>
-      <p>Good luck!</p>
+      <h2>Organizations</h2>
+      {organizations ? (
+        <ul>
+          {organizations.map((org) => (
+            <li key={org.organization_id}>
+              <strong>{org.name}</strong>
+              <ul>
+                {org.accounts.map((account) => (
+                  <li key={account.account_id}>
+                    {account.name}
+                    <ul>
+                      {account.deals.map((deal) => (
+                        <li key={deal.deal_id}>
+                          {deal.name} – ${deal.value} ({deal.status})
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
