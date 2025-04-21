@@ -7,8 +7,8 @@ export class Account {
     public account_id: number,
     public organization_id: number,
     public name: string,
-    public created_at: Date,
-    public updated_at: Date
+    public created_at: Date | null = null,
+    public updated_at: Date | null = null
   ) {}
 
   static fromRow(row: any): Account {
@@ -19,16 +19,6 @@ export class Account {
       new Date(row.created_at),
       new Date(row.updated_at)
     );
-  }
-
-  toRow(): any {
-    return {
-      account_id: this.account_id,
-      organization_id: this.organization_id,
-      name: this.name,
-      created_at: this.created_at.toISOString(),
-      updated_at: this.updated_at.toISOString()
-    };
   }
 
   setDeals(deals: Deal[]) {
