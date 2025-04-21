@@ -4,7 +4,7 @@ export enum DealStatus {
   Won = "Won",
   Lost = "Lost",
   OnHold = "OnHold"
-}
+} 
 
 export class Deal {
   constructor(

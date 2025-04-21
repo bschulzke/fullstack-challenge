@@ -19,17 +19,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const setupDummyData = () => {
-  db.prepare("INSERT INTO organizations (name) VALUES (?)").run("Org 1");
-  db.prepare("INSERT INTO organizations (name) VALUES (?)").run("Org 2");
+  const existing = db.prepare("SELECT COUNT(*) as count FROM organizations").get() as {count: number};
+  if (existing.count > 0) return;
+  db.prepare("INSERT INTO organizations (name) VALUES (?)").run("The Resistance Network");
 
-  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(1, "Account 1-1");
-  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(1, "Account 1-2");
-  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(2, "Account 2-1");
+  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(1, "Neo");
+  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(1, "Trinity");
+  db.prepare("INSERT INTO accounts (organization_id, name) VALUES (?, ?)").run(1, "Agent Smith");
 
-  // Updated the deal insertions to reflect the DealStatus enum
-  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(1, "Deal 1-1", "2025-01-01", "2025-12-31", DealStatus.Prospect, 100);
-  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(2, "Deal 1-2", "2025-01-01", "2025-12-31", DealStatus.Negotiation, 500);
-  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(3, "Deal 2-1", "2025-01-01", "2025-12-31", DealStatus.Won, 750);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(1, "The One's Awakening", "2025-01-01", "2025-03-31", DealStatus.Prospect, 50000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(1, "Destroy the Matrix", "2025-04-01", "2025-12-31", DealStatus.Negotiation, 100000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(1, "Free the Minds", "2025-01-01", "2025-12-31", DealStatus.Won, 500000);
+
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(2, "Matrix Infiltration", "2025-02-01", "2025-06-30", DealStatus.Prospect, 30000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(2, "Extract the Keymaker", "2025-03-01", "2025-09-30", DealStatus.Negotiation, 40000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(2, "Escape the Agents", "2025-05-01", "2025-12-31", DealStatus.Won, 20000);
+
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(3, "The Hunt for Rebels", "2025-01-01", "2025-06-30", DealStatus.Prospect, 150000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(3, "Track the Oracle", "2025-02-01", "2025-07-31", DealStatus.Negotiation, 200000);
+  db.prepare("INSERT INTO deals (account_id, name, start_date, end_date, status, value) VALUES (?, ?, ?, ?, ?, ?)").run(3, "Eradicate the Zionists", "2025-03-01", "2025-12-31", DealStatus.Won, 500000);
+
 };
 
 setupDummyData();
